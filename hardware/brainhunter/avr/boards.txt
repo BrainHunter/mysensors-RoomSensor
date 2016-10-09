@@ -1,0 +1,51 @@
+menu.cpu=Processor
+
+######################################
+## NKTronic RoomSensor
+
+
+NKTronicRoomSensor.name= NK-Tronic RoomSensor
+
+NKTronicRoomSensor.upload.tool=avrdude
+NKTronicRoomSensor.upload.NKTronicRoomSensortocol=arduino
+
+NKTronicRoomSensor.bootloader.tool=avrdude
+NKTronicRoomSensor.bootloader.unlock_bits=0x3F
+NKTronicRoomSensor.bootloader.lock_bits=0x0F
+
+NKTronicRoomSensor.build.board=AVR_PRO
+NKTronicRoomSensor.build.core=arduino:arduino
+NKTronicRoomSensor.build.variant=eightanaloginputs
+
+## Arduino Pro or Pro Mini (5V, 16 MHz) w/ ATmega328
+## -------------------------------------------------
+NKTronicRoomSensor.menu.cpu.16MHzatmega328=ATmega328 (5V, 16 MHz)
+
+NKTronicRoomSensor.menu.cpu.16MHzatmega328.upload.maximum_size=30720
+NKTronicRoomSensor.menu.cpu.16MHzatmega328.upload.maximum_data_size=2048
+NKTronicRoomSensor.menu.cpu.16MHzatmega328.upload.speed=57600
+
+NKTronicRoomSensor.menu.cpu.16MHzatmega328.bootloader.low_fuses=0xFF
+NKTronicRoomSensor.menu.cpu.16MHzatmega328.bootloader.high_fuses=0xDA
+NKTronicRoomSensor.menu.cpu.16MHzatmega328.bootloader.extended_fuses=0x05
+NKTronicRoomSensor.menu.cpu.16MHzatmega328.bootloader.file=atmega/ATmegaBOOT_168_atmega328.hex
+
+NKTronicRoomSensor.menu.cpu.16MHzatmega328.build.mcu=atmega328p
+NKTronicRoomSensor.menu.cpu.16MHzatmega328.build.f_cpu=16000000L
+
+## Arduino Pro or Pro Mini (3.3V, 8 MHz , internal resonator) w/ ATmega328
+## --------------------------------------------------
+NKTronicRoomSensor.menu.cpu.8MHzRCatmega328=ATmega328 (3.3V, 8 MHz RC)
+
+NKTronicRoomSensor.menu.cpu.8MHzRCatmega328.upload.maximum_size=30720
+NKTronicRoomSensor.menu.cpu.8MHzRCatmega328.upload.maximum_data_size=2048
+NKTronicRoomSensor.menu.cpu.8MHzRCatmega328.upload.speed=57600
+
+NKTronicRoomSensor.menu.cpu.8MHzRCatmega328.bootloader.low_fuses=0xE2
+NKTronicRoomSensor.menu.cpu.8MHzRCatmega328.bootloader.high_fuses=0xDA
+NKTronicRoomSensor.menu.cpu.8MHzRCatmega328.bootloader.extended_fuses=0xFF
+NKTronicRoomSensor.menu.cpu.8MHzRCatmega328.bootloader.file=atmega/ATmegaBOOT_168_atmega328_pro_8MHz.hex
+
+NKTronicRoomSensor.menu.cpu.8MHzRCatmega328.build.mcu=atmega328p
+NKTronicRoomSensor.menu.cpu.8MHzRCatmega328.build.f_cpu=8000000L
+
