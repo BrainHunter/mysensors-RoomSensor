@@ -2,15 +2,20 @@
 #include "arduino.h"
 #include <DHT.h>
 #include "SparkFunBME280.h"
+#include <SI7021.h>
 
 //configuration
-//#define HAS_NTC
-#define HAS_LDR
+#define HAS_NTC
+//#define HAS_LDR
 //#define HAS_BME280
+#define HAS_SI7021
 #define HAS_DHT
 
 //BME280 related:
 BME280 bmeSensor;
+
+//SI7021
+SI7021 SI7021Sensor;
 
 
 // DHT Sensor related:
@@ -26,7 +31,8 @@ boolean metric = true;
 #define BME_Temp_ID 4
 #define BME_Humidity_ID 5
 #define BME_Pressure_ID 6
-
+#define SI_Temp_ID 7
+#define SI_Humidity_ID 8
 
 // mysensors related
 MySensor gw;
@@ -44,6 +50,12 @@ MyMessage BMETempMsg(BME_Temp_ID,V_TEMP);
 MyMessage BMEHumMsg(BME_Humidity_ID,V_HUM);
 MyMessage BMEBaroMsg(BME_Pressure_ID,V_PRESSURE);
 #endif
+#ifdef HAS_SI7021
+MyMessage SITempMsg(SI_Temp_ID,V_TEMP);
+MyMessage SIHumMsg(SI_Humidity_ID,V_HUM);
+#endif
+
+
 // local defs
 unsigned long timediff(unsigned long t1, unsigned long t2);
 #ifdef HAS_NTC
@@ -90,6 +102,12 @@ void setup() {
   gw.present(BME_Humidity_ID , S_HUM);
   gw.present(BME_Pressure_ID , S_BARO);
   #endif
+
+  #ifdef HAS_SI7021
+  gw.present(SI_Temp_ID , S_TEMP);
+  gw.present(SI_Humidity_ID , S_HUM);
+  #endif
+  
   
   // ------ DHT11 init -----
   //Pin 4 is the power source for the DHT
@@ -133,6 +151,11 @@ void setup() {
   
   Serial.print("BME280 init\r\n"); 
   #endif
+
+  
+  #ifdef HAS_SI7021
+  SI7021Sensor.begin();
+  #endif
   
   //  ---- Battery Input ----
   pinMode(A3,INPUT);
@@ -143,6 +166,21 @@ void setup() {
 void loop() {
   
   static uint8_t DoSleep = 1;
+
+  // Testloop:
+  /*  
+  while(0)
+  {
+    si7021_env data = SI7021Sensor.getHumidityAndTemperature();
+    Serial.print("Temp: ");
+    Serial.println(data.celsiusHundredths);
+    Serial.print("HUM: ");
+    Serial.println(data.humidityPercent);
+
+    delay(5000);
+    
+  }
+  */
   
   // static unsigned long TempTime = 0;
   // if (timediff(TempTime, millis()) > 4000 )
@@ -245,8 +283,23 @@ void loop() {
   }
   #endif
 
-  #define SLEEP_TIME (2UL*60UL*1000UL)    // 2min * 60sec * 1000ms
-  //#define SLEEP_TIME (2UL*1000UL)    // 2sec * 1000ms
+  #ifdef HAS_SI7021
+    si7021_env data = SI7021Sensor.getHumidityAndTemperature();
+    float temp = ((float)data.celsiusHundredths) / 100; 
+    gw.send(SITempMsg.set(temp, 1));
+    
+    Serial.print("SI Temp: ");
+    Serial.println(temp);
+    
+    float humidity = data.humidityPercent;
+    gw.send(SIHumMsg.set(humidity, 1));
+    Serial.print("SI HUM: ");
+    Serial.println(humidity);
+  #endif
+
+  
+  //#define SLEEP_TIME (2UL*60UL*1000UL)    // 2min * 60sec * 1000ms
+  #define SLEEP_TIME (2UL*1000UL)    // 2sec * 1000ms
   
   //go into power down mode: 
   gw.sleep(SLEEP_TIME);  
