@@ -18,17 +18,23 @@
 // -------  Configuration Start ------- 
   // Sensors configuration:
   // Comment in all sensors connected:
-  #define HAS_NTC
-  //#define HAS_LDR
+  //#define HAS_NTC
+  #define HAS_LDR
   //#define HAS_BME280
   #define HAS_SI7021
-  #define HAS_DHT
+  //#define HAS_DHT
 
   // How long should the sensor sleep ?
-  //#define SLEEP_TIME (2UL*60UL*1000UL)    // 2min * 60sec * 1000ms
-  #define SLEEP_TIME (2UL*1000UL)           // 2sec * 1000ms
+  #define SLEEP_TIME (2UL*60UL*1000UL)    // 2min * 60sec * 1000ms
+  //#define SLEEP_TIME (2UL*1000UL)           // 2sec * 1000ms
 
 // -------  Configuration End -------
+
+
+#define VERSION 1.2
+
+#define xstr(a) str(a)
+#define str(a) #a
 
 // BME280 related:
 BME280 bmeSensor;
@@ -157,9 +163,47 @@ void setup() {
   
 } // END void setup() 
 
+
+#ifdef HAS_NTC
+  #define NTC_TEXT " NTC"
+#else
+ #define NTC_TEXT ""
+#endif
+
+#ifdef HAS_LDR 
+ #define LDR_TEXT " LDR" 
+#else
+ #define LDR_TEXT ""
+#endif 
+
+#ifdef HAS_BME280 
+  #define BME_TEXT " BME" 
+#else
+ #define BME_TEXT ""
+#endif 
+
+#ifdef HAS_SI7021 
+ #define SI_TEXT " SI" 
+#else
+ #define SI_TEXT ""
+#endif 
+
+#ifdef HAS_DHT 
+ #define DHT_TEXT " DHT" 
+#else
+ #define DHT_TEXT ""
+#endif 
+ 
+#define NodeName "Room Sensor " NTC_TEXT LDR_TEXT BME_TEXT SI_TEXT DHT_TEXT
+  
 void presentation()  
 {
-  sendSketchInfo("Room Sensor Node", "1.1"); 
+  #ifdef MY_DEBUG
+  sendSketchInfo(NodeName, xstr(VERSION) "D");  
+  #else
+  sendSketchInfo(NodeName, xstr(VERSION)); 
+  #endif
+  
   Serial.println("Sketch Info");
   
   //register the sensors to the gateway
