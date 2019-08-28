@@ -31,7 +31,7 @@
 // -------  Configuration End -------
 
 
-#define VERSION 1.2
+#define VERSION 1.3
 
 #define xstr(a) str(a)
 #define str(a) #a
@@ -415,7 +415,7 @@ int NTC_ADC2Temperature(unsigned int adc_value){
 
 #define BAT_AVG_NUM 8
 #define BAT100  1500
-#define BAT0    800
+#define BAT0    950
 
 int ReadBandgap()
 {
